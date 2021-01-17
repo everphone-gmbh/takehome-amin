@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import './Login.scss';
+import axios from "axios";
 
 function Login() {
     const [inputs, setInputs] = useState({
@@ -13,6 +14,7 @@ function Login() {
     const loggingIn = false; // useSelector(state => state.authentication.loggingIn);
     // const location = useLocation();
     const lang = useSelector(state=>state.lang);
+    const History = useHistory();
 
     function handleChange(e) {
         const { name, value } = e.target;
@@ -24,6 +26,22 @@ function Login() {
 
         setSubmitted(true);
         if (username && password) {
+            const formData = new FormData();
+            formData.append('email',username);
+            formData.append('password',password);
+            axios.post('http://localhost:8080/api/login', formData)
+            .then(res=> {
+                if (res.data) {
+                    localStorage.setItem("token",res.data);
+                    History.push('/'+lang)
+                }
+                console.log(res);
+            })
+            .catch(error => {
+                if (error && error.response)
+                    console.log("ERRRR:: ",error.response.data);
+                alert('Wrong password')
+            });
             // get return url from location state or default to home page
             // const { from } = location.state || { from: { pathname: "/" } };
             // dispatch(login(username, password, from));
