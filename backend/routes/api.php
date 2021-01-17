@@ -4,6 +4,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\GiftsController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -24,7 +28,14 @@ Route::post('gifts', 'App\Http\Controllers\GiftsController@store');
 Route::put('gifts/{id}', 'App\Http\Controllers\GiftsController@update');
 Route::get('gifts', 'App\Http\Controllers\GiftsController@index');
 
- 
+// Route::get('/login', [AuthenticatedSessionController::class, 'create'])
+//                 ->middleware('guest')
+//                 ->name('login');
+
+Route::post('/login', [AuthenticatedSessionController::class, 'store'])->middleware('guest');
+
+Route::post('/register', [RegisteredUserController::class, 'store'])->middleware('guest');
+
 // Route::get('/employ', function() {
 //     // If the Content-Type and Accept headers are set to 'application/json', 
 //     // this will return a JSON structure. This will be cleaned up later.

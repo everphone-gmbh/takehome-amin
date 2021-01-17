@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\EmployeeController;
-use App\Http\Controllers\GiftsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,10 +14,11 @@ use App\Http\Controllers\GiftsController;
 */
 
 Route::get('/', function () {
-    return csrf_token(); 
-    // return view('welcome');
+    return view('welcome');
 });
 
-Route::resource('employees', EmployeeController::class);
-Route::resource('gifts', GiftsController::class);
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
+require __DIR__.'/auth.php';
